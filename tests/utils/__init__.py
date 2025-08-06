@@ -256,19 +256,14 @@ class StrCLIResponse(str, BaseCLIResponse):
             elif self.strip().startswith('{'):
                 # Looks like JSON body.
                 self._json = json.loads(self)
-            elif self.count('Content-Type:') == 1:
-                # Looks like a HTTP message,
-                # try to extract JSON from its body.
+            elif 'content-type:' in self.lower():
+                # Looks like an HTTP message; extract JSON after the last blank line.
+                separator = '\r\n\r\n' if '\r\n\r\n' in self else '\n\n'
                 try:
-                    j = self.strip()[self.strip().rindex('\r\n\r\n'):]
+                    j = self.strip().rsplit(separator, 1)[-1]
+                    self._json = json.loads(j)
                 except ValueError:
                     pass
-                else:
-                    try:
-                        # noinspection PyAttributeOutsideInit
-                        self._json = json.loads(j)
-                    except ValueError:
-                        pass
         return self._json
 
 

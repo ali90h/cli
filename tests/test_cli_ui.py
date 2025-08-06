@@ -27,7 +27,7 @@ NAKED_HELP_MESSAGE_PRETTY_WITH_NO_ARG = NAKED_BASE_TEMPLATE.format(
 
 NAKED_HELP_MESSAGE_PRETTY_WITH_INVALID_ARG = NAKED_BASE_TEMPLATE.format(
     extra_args="--pretty {all, colors, format, none} ",
-    error_msg="argument --pretty: invalid choice: '$invalid' (choose from 'all', 'colors', 'format', 'none')"
+    error_msg="argument --pretty: invalid choice: '$invalid' (choose from all, colors, format, none)"
 )
 
 

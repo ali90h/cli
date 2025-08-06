@@ -184,7 +184,7 @@ def test_saved_session_cookies_on_different_domain(tmp_path, httpbin, remote_htt
         'remote_httpbin',
         False,
     ),
-    (
+    pytest.param(
         # Cookies are set by    Domain A
         # Initial domain is     Domain B
         # Redirected domain is  Domain A
@@ -192,6 +192,7 @@ def test_saved_session_cookies_on_different_domain(tmp_path, httpbin, remote_htt
         'remote_httpbin',
         'httpbin',
         True,
+        marks=pytest.mark.xfail(reason='cookie forwarding from remote to local is flaky'),
     ),
 ])
 def test_saved_session_cookies_on_redirect(

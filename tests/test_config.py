@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -33,7 +34,8 @@ def test_config_file_not_valid(httpbin):
     assert 'invalid config file' in r.stderr
 
 
-@pytest.mark.skipif(is_windows, reason='cannot chmod 000 on Windows')
+@pytest.mark.skipif(is_windows or os.geteuid() == 0,
+                    reason='cannot chmod 000 on Windows or when running as root')
 def test_config_file_inaccessible(httpbin):
     env = MockEnvironment()
     env.create_temp_config_dir()

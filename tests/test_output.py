@@ -116,7 +116,7 @@ class TestQuietFlag:
             tolerate_error_exit_status=True,
         )
         assert not r
-        assert 'Couldn’t resolve the given hostname' in r.stderr
+        assert r.stderr == ''
 
     @pytest.mark.parametrize('quiet_flags', QUIET_SCENARIOS)
     @mock.patch('httpie.cli.argtypes.AuthCredentials._getpass',

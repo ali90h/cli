@@ -7,7 +7,7 @@ BUILD_DIR = Path(__file__).parent
 HTTPIE_DIR = BUILD_DIR.parent.parent.parent
 
 EXTRAS_DIR = HTTPIE_DIR / 'extras'
-MAN_PAGES_DIR = EXTRAS_DIR /  'man'
+MAN_PAGES_DIR = EXTRAS_DIR / 'man'
 
 SCRIPT_DIR = BUILD_DIR / Path('scripts')
 HOOKS_DIR = SCRIPT_DIR / 'hooks'
@@ -60,7 +60,7 @@ def build_packages(http_binary: Path, httpie_binary: Path) -> None:
 
     # A list of additional dependencies
     deps = [
-        'python3 >= 3.7',
+        'python3 >= 3.8',
         'python3-pip'
     ]
 
@@ -102,7 +102,6 @@ def main():
     # Rename http_cli/httpie_cli to http/httpie
     binaries['http_cli'].rename(DIST_DIR / 'http')
     binaries['httpie_cli'].rename(DIST_DIR / 'httpie')
-
 
 
 if __name__ == '__main__':
