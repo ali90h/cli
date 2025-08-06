@@ -60,7 +60,7 @@ def build_packages(http_binary: Path, httpie_binary: Path) -> None:
 
     # A list of additional dependencies
     deps = [
-        'python3 >= 3.7',
+        'python3 >= 3.8',
         'python3-pip'
     ]
 

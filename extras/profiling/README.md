@@ -7,7 +7,7 @@ infrastructure to automate this testing across versions.
 
 Ensure the following requirements are satisfied:
 
-- Python 3.7+
+- Python 3.8+
 - `pyperf`
 
 Then, run the `extras/profiling/run.py`:

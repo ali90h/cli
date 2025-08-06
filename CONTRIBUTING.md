@@ -164,7 +164,7 @@ oversight. Ping one of the maintainers to get a `benchmark` label on your branch
 
 If you are on a Windows machine and not able to run `make`,
 follow the next steps for a basic setup. As a prerequisite, you need to have
-Python 3.7+ installed.
+Python 3.8+ installed.
 
 Create a virtual environment and activate it:
 
