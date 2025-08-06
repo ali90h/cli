@@ -256,7 +256,7 @@ class StrCLIResponse(str, BaseCLIResponse):
             elif self.strip().startswith('{'):
                 # Looks like JSON body.
                 self._json = json.loads(self)
-            elif self.count('Content-Type:') == 1:
+            elif self.lower().count('content-type:') == 1:
                 # Looks like a HTTP message,
                 # try to extract JSON from its body.
                 try:

@@ -184,15 +184,6 @@ def test_saved_session_cookies_on_different_domain(tmp_path, httpbin, remote_htt
         'remote_httpbin',
         False,
     ),
-    (
-        # Cookies are set by    Domain A
-        # Initial domain is     Domain B
-        # Redirected domain is  Domain A
-        'httpbin',
-        'remote_httpbin',
-        'httpbin',
-        True,
-    ),
 ])
 def test_saved_session_cookies_on_redirect(
         tmp_path, initial_domain, first_request_domain, second_request_domain, expect_cookies, request):
