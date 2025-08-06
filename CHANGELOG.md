@@ -3,6 +3,11 @@
 This document records all notable changes to [HTTPie](https://httpie.io).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Fixed
+- Respect `Content-Length` with `--download` when `Content-Encoding` is present to avoid false "Incomplete download" errors. ([#423](https://github.com/httpie/cli/issues/423))
+
 ## [3.2.4](https://github.com/httpie/cli/compare/3.2.3...3.2.4) (2024-11-01)
 
 - Fix default certs loading and unpin `requests`. ([#1596](https://github.com/httpie/cli/issues/1596))
