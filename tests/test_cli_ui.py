@@ -1,6 +1,9 @@
-import pytest
-import shutil
 import os
+import shutil
+import sys
+
+import pytest
+
 from tests.utils import http
 
 NAKED_BASE_TEMPLATE = """\
@@ -25,9 +28,14 @@ NAKED_HELP_MESSAGE_PRETTY_WITH_NO_ARG = NAKED_BASE_TEMPLATE.format(
     error_msg="argument --pretty: expected one argument"
 )
 
+if sys.version_info >= (3, 12):
+    choices_repr = "all, colors, format, none"
+else:
+    choices_repr = "'all', 'colors', 'format', 'none'"
+
 NAKED_HELP_MESSAGE_PRETTY_WITH_INVALID_ARG = NAKED_BASE_TEMPLATE.format(
     extra_args="--pretty {all, colors, format, none} ",
-    error_msg="argument --pretty: invalid choice: '$invalid' (choose from 'all', 'colors', 'format', 'none')"
+    error_msg=f"argument --pretty: invalid choice: '$invalid' (choose from {choices_repr})"
 )
 
 

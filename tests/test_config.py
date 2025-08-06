@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -44,7 +45,10 @@ def test_config_file_inaccessible(httpbin):
     r = http(httpbin + '/get', env=env)
     assert HTTP_OK in r
     assert 'http: warning' in r.stderr
-    assert 'cannot read config file' in r.stderr
+    if os.getuid() == 0:
+        assert 'invalid config file' in r.stderr
+    else:
+        assert 'cannot read config file' in r.stderr
 
 
 def test_default_options_overwrite(httpbin):
