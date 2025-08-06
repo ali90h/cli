@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 - Respect `Content-Length` with `--download` when `Content-Encoding` is present to avoid false "Incomplete download" errors. ([#423](https://github.com/httpie/cli/issues/423))
+- [CI] Updated Python version matrix and refreshed dependencies.
 
 ## [3.2.4](https://github.com/httpie/cli/compare/3.2.3...3.2.4) (2024-11-01)
 
