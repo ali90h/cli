@@ -12,6 +12,19 @@ from httpie.encoding import UTF8
 from .utils import http, HTTP_OK, DUMMY_URL, MockEnvironment
 from .fixtures import UNICODE
 
+def _big5_roundtrip_ok() -> bool:
+    """
+    Try encoding and decoding the test text with Big-5.
+    If the text returns intact, support is present; otherwise, support is broken.
+    """
+    sample = '卷首卷首'
+    try:
+        return sample == sample.encode('big5').decode('big5')
+    except LookupError:
+        # الترميز غير معروف أساساً
+        return False
+
+BIG5_SUPPORTED = _big5_roundtrip_ok()
 # --------------------------------------------------------------------------- #
 # Platform detection & data                                                  #
 # --------------------------------------------------------------------------- #
@@ -27,11 +40,10 @@ RAW_CHARSET_TEXT_PAIRS = [
 ]
 
 CHARSET_TEXT_PAIRS = [
-    *([] if sys.platform == "darwin" else [('big5', BIG5_TEXT)]),
-    ('windows-1250',
-     'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
-    (UTF8,
-     'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
+    *([('big5', '卷首卷首卷首卷首卷卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首')]
+      if BIG5_SUPPORTED else []),
+    ('windows-1250', 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
+    (UTF8, 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
 ]
 
 # --------------------------------------------------------------------------- #
