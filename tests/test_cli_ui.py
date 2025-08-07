@@ -4,6 +4,8 @@ import os
 import re                       # ← استيراد re
 from tests.utils import http
 
+
+
 NAKED_BASE_TEMPLATE = """\
 usage:
     http {extra_args}[METHOD] URL [REQUEST_ITEM ...]
@@ -15,6 +17,7 @@ for more information:
     run 'http --help' or visit https://httpie.io/docs/cli
 
 """
+
 
 # دالة لإزالة الاقتباسات المفردة حول أسماء الخيارات
 def _strip_quotes(msg: str) -> str:
