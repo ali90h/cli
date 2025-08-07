@@ -34,7 +34,7 @@ _IS_MACOS = sys.platform == "darwin"
 RAW_CHARSET_TEXT_PAIRS = [
     ('big5', '卷首卷首卷首卷首卷卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首'),
     ('windows-1250', 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
-    (UTF8,'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
+    (UTF8, 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
 ]
 
 CHARSET_TEXT_PAIRS = [
@@ -47,6 +47,7 @@ CHARSET_TEXT_PAIRS = [
 # Sanity check for the table above                                            #
 # --------------------------------------------------------------------------- #
 
+
 def test_charset_text_pairs():
     for charset, text in RAW_CHARSET_TEXT_PAIRS:
         assert len(text) > TOO_SMALL_SEQUENCE
@@ -57,6 +58,7 @@ def test_charset_text_pairs():
 # --------------------------------------------------------------------------- #
 # (everything below this point is unchanged)                                  #
 # --------------------------------------------------------------------------- #
+
 
 def test_unicode_headers(httpbin):
     # httpbin doesn't interpret UFT-8 headers
