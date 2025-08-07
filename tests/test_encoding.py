@@ -17,31 +17,33 @@ from .fixtures import UNICODE
 # --------------------------------------------------------------------------- #
 _IS_MACOS = sys.platform == "darwin"
 
+RAW_CHARSET_TEXT_PAIRS = [
+    ('big5',
+     '卷首卷首卷首卷首卷卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首'),
+    ('windows-1250',
+     'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
+    (UTF8,
+     'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
+]
+
 CHARSET_TEXT_PAIRS = [
-    # Big-5 decoding fails on macOS's bundled libiconv → skip just on that OS
-    pytest.param(
-        'big5',
-        '卷首卷首卷首卷首卷卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首',
-        marks=pytest.mark.skipif(
-            _IS_MACOS,
-            reason="macOS libiconv cannot round-trip Big-5 correctly",
-        ),
-    ),
-    ('windows-1250', 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
-    (UTF8, 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
+    pytest.param(c, t,
+                 marks=pytest.mark.skipif(
+                     sys.platform == "darwin" and c == "big5",
+                     reason="libiconv on macOS mangles Big-5"))
+    for c, t in RAW_CHARSET_TEXT_PAIRS
 ]
 
 # --------------------------------------------------------------------------- #
 # Sanity check for the table above                                            #
 # --------------------------------------------------------------------------- #
 def test_charset_text_pairs():
-    for charset, text in CHARSET_TEXT_PAIRS:
+    # Verify our test data is legit.
+    for charset, text in RAW_CHARSET_TEXT_PAIRS:
         assert len(text) > TOO_SMALL_SEQUENCE
         if charset != UTF8:
             with pytest.raises(UnicodeDecodeError):
-                # Encoding to <charset> and decoding as UTF-8 must explode
-                _ = text.encode(charset).decode(UTF8)
-
+                assert text != text.encode(charset).decode(UTF8)
 # --------------------------------------------------------------------------- #
 # (everything below this point is unchanged)                                  #
 # --------------------------------------------------------------------------- #
