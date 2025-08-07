@@ -8,6 +8,7 @@ from tests.utils import http
 # --------------------------------------------------------------------------- #
 # Helpers                                                                     #
 # --------------------------------------------------------------------------- #
+
 def _strip_quotes(msg: str) -> str:
     """
     Remove single quotes surrounding option names so the comparison works
@@ -54,6 +55,7 @@ PREDEFINED_TERMINAL_SIZE = (200, 100)
 # --------------------------------------------------------------------------- #
 # Fixtures                                                                    #
 # --------------------------------------------------------------------------- #
+
 @pytest.fixture(scope="function")
 def ignore_terminal_size(monkeypatch):
     """

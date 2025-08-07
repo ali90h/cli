@@ -13,6 +13,7 @@ from .fixtures import UNICODE
 
 _IS_WINDOWS = sys.platform.startswith("win")
 
+
 def _big5_roundtrip_ok() -> bool:
     """Return True if Big-5 codec works on this platform."""
     sample = '卷首卷首'
@@ -27,12 +28,13 @@ BIG5_SUPPORTED = _big5_roundtrip_ok()
 # --------------------------------------------------------------------------- #
 # Platform detection & data                                                  #
 # --------------------------------------------------------------------------- #
+
 _IS_MACOS = sys.platform == "darwin"
 
 RAW_CHARSET_TEXT_PAIRS = [
     ('big5', '卷首卷首卷首卷首卷卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首'),
     ('windows-1250', 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
-    (UTF8,            'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
+    (UTF8,'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
 ]
 
 CHARSET_TEXT_PAIRS = [
@@ -44,12 +46,14 @@ CHARSET_TEXT_PAIRS = [
 # --------------------------------------------------------------------------- #
 # Sanity check for the table above                                            #
 # --------------------------------------------------------------------------- #
+
 def test_charset_text_pairs():
     for charset, text in RAW_CHARSET_TEXT_PAIRS:
         assert len(text) > TOO_SMALL_SEQUENCE
         if charset != UTF8:
             with pytest.raises(UnicodeDecodeError):
                 text.encode(charset).decode(UTF8)
+
 # --------------------------------------------------------------------------- #
 # (everything below this point is unchanged)                                  #
 # --------------------------------------------------------------------------- #
