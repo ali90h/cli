@@ -1,18 +1,21 @@
 import os
 import re
 import shutil
+
 import pytest
 
 from tests.utils import http
+
 
 # --------------------------------------------------------------------------- #
 # Helpers                                                                     #
 # --------------------------------------------------------------------------- #
 
+
 def _strip_quotes(msg: str) -> str:
     """
-    Remove single quotes surrounding option names so the comparison works
-    across different Click/argparse versions.
+    Remove single quotes around option names so comparisons work across
+    different Click/argparse versions.
     """
     return re.sub(r"'([a-z]+)'", r"\1", msg)
 
@@ -58,16 +61,15 @@ PREDEFINED_TERMINAL_SIZE = (200, 100)
 # Fixtures                                                                    #
 # --------------------------------------------------------------------------- #
 
+
 @pytest.fixture(scope="function")
 def ignore_terminal_size(monkeypatch):
     """
     Force a fixed terminal size so that wrapped output is deterministic.
     """
 
-
     def fake_terminal_size(*_args, **_kwargs):
         return os.terminal_size(PREDEFINED_TERMINAL_SIZE)
-
 
     # Python < 3.8 needs the COLUMNS env var
     monkeypatch.setitem(os.environ, "COLUMNS", str(PREDEFINED_TERMINAL_SIZE[0]))
@@ -79,6 +81,7 @@ def ignore_terminal_size(monkeypatch):
 # Tests                                                                       #
 # --------------------------------------------------------------------------- #
 
+
 @pytest.mark.parametrize(
     "args, expected_msg",
     [
@@ -88,8 +91,6 @@ def ignore_terminal_size(monkeypatch):
         (["--pretty", "$invalid"], NAKED_HELP_MESSAGE_PRETTY_WITH_INVALID_ARG),
     ],
 )
-
-
 def test_naked_invocation(ignore_terminal_size, args, expected_msg):
     result = http(*args, tolerate_error_exit_status=True)
     assert _strip_quotes(result.stderr) == _strip_quotes(expected_msg)
