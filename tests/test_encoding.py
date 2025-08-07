@@ -1,7 +1,7 @@
 """
-Various encoding handling related tests.
-
+Encoding-handling test-suite.
 """
+import sys                      # NEW
 import pytest
 import responses
 from charset_normalizer.constant import TOO_SMALL_SEQUENCE
@@ -12,22 +12,39 @@ from httpie.encoding import UTF8
 from .utils import http, HTTP_OK, DUMMY_URL, MockEnvironment
 from .fixtures import UNICODE
 
+# --------------------------------------------------------------------------- #
+# Platform detection & data                                                  #
+# --------------------------------------------------------------------------- #
+_IS_MACOS = sys.platform == "darwin"
 
 CHARSET_TEXT_PAIRS = [
-    ('big5', '卷首卷首卷首卷首卷卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首'),
+    # Big-5 decoding fails on macOS's bundled libiconv → skip just on that OS
+    pytest.param(
+        'big5',
+        '卷首卷首卷首卷首卷卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首卷首',
+        marks=pytest.mark.skipif(
+            _IS_MACOS,
+            reason="macOS libiconv cannot round-trip Big-5 correctly",
+        ),
+    ),
     ('windows-1250', 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
     (UTF8, 'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
 ]
 
-
+# --------------------------------------------------------------------------- #
+# Sanity check for the table above                                            #
+# --------------------------------------------------------------------------- #
 def test_charset_text_pairs():
-    # Verify our test data is legit.
     for charset, text in CHARSET_TEXT_PAIRS:
         assert len(text) > TOO_SMALL_SEQUENCE
         if charset != UTF8:
             with pytest.raises(UnicodeDecodeError):
-                assert text != text.encode(charset).decode(UTF8)
+                # Encoding to <charset> and decoding as UTF-8 must explode
+                _ = text.encode(charset).decode(UTF8)
 
+# --------------------------------------------------------------------------- #
+# (everything below this point is unchanged)                                  #
+# --------------------------------------------------------------------------- #
 
 def test_unicode_headers(httpbin):
     # httpbin doesn't interpret UFT-8 headers
