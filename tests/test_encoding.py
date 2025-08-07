@@ -27,11 +27,11 @@ RAW_CHARSET_TEXT_PAIRS = [
 ]
 
 CHARSET_TEXT_PAIRS = [
-    pytest.param(c, t,
-                 marks=pytest.mark.skipif(
-                     sys.platform == "darwin" and c == "big5",
-                     reason="libiconv on macOS mangles Big-5"))
-    for c, t in RAW_CHARSET_TEXT_PAIRS
+    *([] if sys.platform == "darwin" else [('big5', BIG5_TEXT)]),
+    ('windows-1250',
+     'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
+    (UTF8,
+     'Všichni lidé jsou si rovni. Všichni lidé jsou si rovni.'),
 ]
 
 # --------------------------------------------------------------------------- #
