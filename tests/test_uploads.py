@@ -20,6 +20,15 @@ from .fixtures import FILE_PATH_ARG, FILE_PATH, FILE_CONTENT
 
 MAX_RESPONSE_WAIT_TIME = 5
 
+@pytest.mark.skipif(
+    os.getenv("HTTPIE_TEST_WITH_PYOPENSSL") == "1",
+    reason="Chunked upload not supported under pyOpenSSL",
+)
+
+class TestRequestBodyFromFilePath:
+    """
+    `http URL @file'
+    """
 
 def test_chunked_json(httpbin_with_chunked_support):
     r = http(
