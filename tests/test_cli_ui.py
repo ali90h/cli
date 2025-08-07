@@ -1,6 +1,7 @@
 import pytest
 import shutil
 import os
+import re                       # ← استيراد re
 from tests.utils import http
 
 NAKED_BASE_TEMPLATE = """\
@@ -14,6 +15,12 @@ for more information:
     run 'http --help' or visit https://httpie.io/docs/cli
 
 """
+
+# دالة لإزالة الاقتباسات المفردة حول أسماء الخيارات
+def _strip_quotes(msg: str) -> str:
+    """Remove single quotes around option names to make comparison robust
+    across Click/argparse versions."""
+    return re.sub(r"'([a-z]+)'", r"\1", msg)
 
 NAKED_HELP_MESSAGE = NAKED_BASE_TEMPLATE.format(
     extra_args="",
@@ -30,7 +37,6 @@ NAKED_HELP_MESSAGE_PRETTY_WITH_INVALID_ARG = NAKED_BASE_TEMPLATE.format(
     error_msg="argument --pretty: invalid choice: '$invalid' (choose from 'all', 'colors', 'format', 'none')"
 )
 
-
 PREDEFINED_TERMINAL_SIZE = (200, 100)
 
 
@@ -39,10 +45,8 @@ def ignore_terminal_size(monkeypatch):
     """Some tests wrap/crop the output depending on the
     size of the executed terminal, which might not be consistent
     through all runs.
-
     This fixture ensures every run uses the same exact configuration.
     """
-
     def fake_terminal_size(*args, **kwargs):
         return os.terminal_size(PREDEFINED_TERMINAL_SIZE)
 
@@ -53,13 +57,15 @@ def ignore_terminal_size(monkeypatch):
 
 
 @pytest.mark.parametrize(
-    'args, expected_msg', [
+    'args, expected_msg',
+    [
         ([], NAKED_HELP_MESSAGE),
         (['--pretty'], NAKED_HELP_MESSAGE_PRETTY_WITH_NO_ARG),
         (['pie.dev', '--pretty'], NAKED_HELP_MESSAGE_PRETTY_WITH_NO_ARG),
         (['--pretty', '$invalid'], NAKED_HELP_MESSAGE_PRETTY_WITH_INVALID_ARG),
-    ]
+    ],
 )
 def test_naked_invocation(ignore_terminal_size, args, expected_msg):
     result = http(*args, tolerate_error_exit_status=True)
-    assert result.stderr == expected_msg
+    # قارن بعد حذف الاقتباسات المفردة لتفادي اختلاف الإصدارات
+    assert _strip_quotes(result.stderr) == _strip_quotes(expected_msg)
